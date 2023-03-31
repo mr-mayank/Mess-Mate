@@ -130,4 +130,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
 	<script src="js/login.js"></script>
 
 </body>
+<script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
 </html>

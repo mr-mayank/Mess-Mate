@@ -9,6 +9,8 @@ if(!isset($_SESSION['userno'])){
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+
   
   $date = $_POST['date'];
   $check = "SELECT * FROM `meal` WHERE `date` = '$date' and `type` = '1'";
@@ -22,6 +24,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           </script>";
       exit();
   }else{
+    $tdate = date("Y-m-d");
+    $activate_user = "SELECT count(userid) as users FROM `token` WHERE `status` = '1' and `dontgo` != '$tdate'  "; 
+    $result = mysqli_query($conn, $activate_user);
+    $ans = mysqli_fetch_assoc($result);
+    $waste_users = $ans['users'];
+
 
     $itm1 = $_POST['itm1'];
     $itm2 = $_POST['itm2'];
@@ -32,7 +40,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $itm = $itm1."||||" . $itm2."||||" . $itm3."||||" . $itm4."||||" . $itm5;
 
 
-    $sql = "INSERT INTO `meal`(`type`, `items`, `date`, `price`) VALUES ('1','$itm','$date','50')";
+    $sql = "INSERT INTO `meal`(`type`, `items`, `wastage_user` ,`date`, `price`) VALUES ('1','$itm', '$waste_users' ,'$date','50')";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
    

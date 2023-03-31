@@ -13,10 +13,12 @@ $id = $_SESSION['id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty($_POST) ) {
   $meal_status = $_POST['m_status'];
-  if($meal_status == 'true')
+  if($meal_status == 'true'){
     $meal_status = 1;
-  else
+  }
+  else{
     $meal_status = 0;
+  }
     
   $sql = "UPDATE `token` SET `status` = '$meal_status' WHERE `userid` = '$id'";
   $result = mysqli_query($conn, $sql);
