@@ -24,10 +24,10 @@ $sqltoken = "SELECT * FROM `token` WHERE `mobno` = '$mobile' ";
 $result = mysqli_query($conn, $sqltoken);
 $row = mysqli_fetch_assoc($result);
 
+$dont_go = 0;
 if($row > 0){
 $dont = $row['dontgo'];
 
-$dont_go = 0;
 if($dont == $tdate){
   $dont_go = 1;
   $scan = 0;
@@ -58,13 +58,13 @@ if($token > 0 && $status && $tdate <= $edate){
 
 //not coming today
 
-$not_come = "SELECT * from `token` WHERE status = 1 and tokens>0 and `dontgo` != '$tdate' AND `mobno` = '$mobile' ";
+$not_come = "SELECT * from `token` WHERE status = 1 and tokens>0 and `dontgo` != '$tdate' AND `mobno` = '$_SESSION[userno]' ";
 $result_not_come = mysqli_query($conn, $not_come);
-$row_not_come = mysqli_fetch_assoc($result_not_come);
-if($row_not_come > 0){
-  $not_come = 1;
-}else{
+$row_not_come = mysqli_num_rows($result_not_come);
+if($row_not_come == 0){
   $not_come = 0;
+}else{
+  $not_come = 1;
 }
 
 ?>
@@ -97,14 +97,13 @@ if(isset($_POST['reserv'])){
 
   $id = $_POST['id'];
 
-
   $sql = "SELECT * FROM `meal` WHERE `id` = '$id  ' ";
   $result = mysqli_query($conn, $sql);
   $row = mysqli_fetch_assoc($result);
   $added_users = $row['added_user'];
   $added_users = explode(",", $added_users);
 
-  if($added_users[0] == ""){
+  if($added_users[0] == NULL){
     $added_users = $_SESSION['id'];
   }else{
     $added_users = $added_users.",".$_SESSION['id'];

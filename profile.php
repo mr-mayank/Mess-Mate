@@ -11,19 +11,16 @@ $mobile = $_SESSION['userno'];
 $id = $_SESSION['id'];
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty($_POST) ) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty($_POST)) {
   $meal_status = $_POST['m_status'];
-  if($meal_status == 'true'){
+  if ($meal_status == 'true')
     $meal_status = 1;
-  }
-  else{
+  else
     $meal_status = 0;
-  }
-    
+
   $sql = "UPDATE `token` SET `status` = '$meal_status' WHERE `userid` = '$id'";
   $result = mysqli_query($conn, $sql);
-
-} 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
 </head>
 
 <body>
-<script>
+  <script>
     if (window.history.replaceState) {
       window.history.replaceState(null, null, window.location.href);
     }
@@ -93,6 +90,76 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
     </div>
     <a class="log_btn" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i></a>
   </header><!-- End Header -->
+
+  <!--Division for Modal-->
+<div id="myModal" class="modal fade" role="dialog">
+
+<!--Modal-->
+<div class="modal-dialog">
+
+  <!--Modal Content-->
+  <form action="feedback.php" method="post">
+  <div class="modal-content">
+
+    <!-- Modal Header-->
+    <div class="modal-header">
+      <h3>Feedback Request</h3>
+
+      <!--Close/Cross Button-->
+      <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+    </div>
+
+    <!-- Modal Body-->
+    <div class="modal-body text-center">
+      <i class="far fa-file-alt fa-4x mb-3 animated rotateIn icon1"></i>
+      <h3>Your opinion matters</h3>
+      <h5>Help us improve our product? <strong>Give us your feedback.</strong></h5>
+      <hr>
+      <h6>Your Rating</h6>
+    </div>
+
+    <!-- Radio Buttons for Rating-->
+    
+    <div class="form-check mb-4">
+      <input name="feedback" value="5" type="radio">
+      <label class="ml-3">Very good</label>
+    </div>
+    <div class="form-check mb-4">
+      <input name="feedback" value="4" type="radio">
+      <label class="ml-3">Good</label>
+    </div>
+    <div class="form-check mb-4">
+      <input name="feedback"  value="3" type="radio">
+      <label class="ml-3">Mediocre</label>
+    </div>
+    <div class="form-check mb-4">
+      <input name="feedback"  value="2" type="radio">
+      <label class="ml-3">Bad</label>
+    </div>
+    <div class="form-check mb-4">
+      <input name="feedback"  value="1" type="radio">
+      <label class="ml-3">Very Bad</label>
+    </div>
+
+    <!--Text Message-->
+    <div class="text-center">
+      <h4>What could we improve?</h4>
+    </div>
+    <textarea type="textarea" name="message" placeholder="Your Message" rows="3"></textarea>
+
+
+    <!-- Modal Footer-->
+    <div class="modal-footer">
+    <button type="submit" class="btn btn-success">Success</button>
+      <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
+    </div>
+
+    
+  </div>
+  </form>
+</div>
+</div>
+
   <section class="vh-200" style="background-color: #FFCC97;">
     <div class="container py-5 h-100">
 
@@ -105,15 +172,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
 
       $result = mysqli_query($conn, $sql);
       $row = mysqli_fetch_assoc($result);
+      $num = mysqli_num_rows($result);
 
-      $name = $row['name'];
-      $email = $row['email'];
-      $mobile = $row['mobile'];
-      $tokens = $row['tokens'];
-      $ex_day = (strtotime($row['estime']) - strtotime(date('d-m-Y'))) / (60 * 60 * 24);
-      $e_date = date('d-m-Y', strtotime($row['end_time']));
-
-
+      if ($num <= 0) {
+        $sql = "SELECT * FROM users WHERE id=$id";
+        $result = mysqli_query($conn, $sql);
+        $row2 = mysqli_fetch_assoc($result);
+        $name = $row2['name'];
+        $email = $row2['email'];
+        $mobile = $row2['mobile'];
+        $tokens = 0;
+        $ex_day = 0;
+        $e_date = 'YYYY-MM-DD';
+      } else {
+        $name = $row['name'];
+        $email = $row['email'];
+        $mobile = $row['mobile'];
+        $tokens = $row['tokens'];
+        $d_tokens = $row['d_tokens'];
+        $ex_day = (strtotime($row['estime']) - strtotime(date('d-m-Y'))) / (60 * 60 * 24);
+        $e_date = date('d-m-Y', strtotime($row['end_time']));
+      }
 
       ?>
       <div class="card" style="border-radius: 15px;">
@@ -136,13 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
 
                 <div class="pro_token">
                   <div>
-                    <p class="small text-muted mb-1" style="color: #2b2a2a;">Tokens</p>
-                    <p class="mb-0"><?php echo $tokens; ?></p>
-                  </div>
-                </div>
-
-                <div class="pro_token">
-                  <div>
                     <p class="small text-muted mb-1" style="color: #2b2a2a;">Expired</p>
                     <p class="mb-0"><?php echo $ex_day; ?> Days left</p>
                   </div>
@@ -150,8 +222,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
 
                 <div class="pro_token">
                   <div>
-                    <p class="small text-muted mb-1" style="color: #2b2a2a;">Token End date</p>
-                    <p class="mb-0"><?php echo $e_date; ?></p>
+                    <p class="small text-muted mb-1" style="color: #2b2a2a;">Lunch Tokens</p>
+                    <p class="mb-0"><?php echo $tokens; ?></p>
+                  </div>
+                </div>
+
+                <div class="pro_token">
+                  <div>
+                    <p class="small text-muted mb-1" style="color: #2b2a2a;">Dinner Tokens</p>
+                    <p class="mb-0"><?php echo $d_tokens; ?></p>
                   </div>
                 </div>
               </div>
@@ -175,29 +254,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
                     $sql = "SELECT * FROM `token` WHERE `userid`= '$id';";
                     $result4 = mysqli_query($conn, $sql);
                     $row4 = mysqli_fetch_assoc($result4);
-                    if ($row4['status'] == '1') {
-                        
-                     echo '<label class="switch">
+                    $num3 = mysqli_num_rows($result4);
+                    if ($num3 != 0) {
+
+                      if ($row4['status'] == '1') {
+
+                        echo '<label class="switch">
                      <input type="checkbox" id="meal_status" checked name="meal_status" onclick="status()">
                     
                      <span class="slider round"></span>
                    </label>';
-                    
-                    } else {
+                      } else {
+                        echo '<label class="switch">
+                      <input type="checkbox" id="meal_status" name="meal_status" onclick="status()">
+                     
+                      <span class="slider round"></span>
+                    </label>';
+                      }
+                    }
+                    else{
                       echo '<label class="switch">
                       <input type="checkbox" id="meal_status" name="meal_status" onclick="status()">
                      
                       <span class="slider round"></span>
                     </label>';
-
                     }
                     ?>
-                    
+
                     <input type="hidden" id="m_status" name="m_status">
                   </form>
 
                   <p class="mb-2"> Auto Plate Book</p>
                 </center>
+                <div class="d-flex pt-1" style="padding-left: 20px; width: 250px; height:50px">
+                    <button type="button" data-toggle="modal" data-target="#myModal"  class="btn btn-outline-dark me-1 flex-grow-1" >Give Feedback</button>
+                </div>
               </div>
 
             </div>
@@ -306,12 +397,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
 
 </body>
 <script>
-
   function status() {
     var m_status = document.getElementById("meal_status").checked;
-   console.log(m_status);
-   document.getElementById("m_status").value = m_status;
-   document.getElementById("meal_status_form").submit();
+    console.log(m_status);
+    document.getElementById("m_status").value = m_status;
+    document.getElementById("meal_status_form").submit();
 
   }
 
@@ -325,7 +415,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['m_status']) && !empty(
   }
 
   function to_payment() {
-
+    window.location.href = "pay_history.php";
   }
 </script>
 

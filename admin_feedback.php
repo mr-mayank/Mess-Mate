@@ -7,9 +7,7 @@ if ($_SESSION['user_type'] != 'admin') {
   exit();
 }
 
-$mobile = $_SESSION['userno'];
-$id = $_SESSION['id'];
-$sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
+
 
 ?>
 <!DOCTYPE html>
@@ -68,7 +66,6 @@ $sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
       </nav><!-- .navbar -->
 
 
-      <a class="btn-book-a-table" href="subscription.php">Buy Token</a>
 
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
@@ -76,95 +73,45 @@ $sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
     </div>
     <a class="log_btn" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i></a>
   </header><!-- End Header -->
-  <section class="vh-200" style="background-color: #FFCC97;">
-    <div class="container py-5 h-100">
-
-
-    <?php 
-
-    $sql = "SELECT * FROM users WHERE users.id=$id";
-    
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-
-    $name = $row['name'];
-    $email = $row['email'];
-    $mobile = $row['mobile'];    
-    
-    ?>
-      <div class="card" style="border-radius: 15px;">
-        <div class="card-body p-4">
-          <div class="d-flex text-black">
-            <div class="flex-shrink-0">
-              <img src="assets/user.png" alt="Generic placeholder image" class="img-fluid" style="width: 180px; margin-top:60px; border-radius: 10px;">
-            </div>
-            <div class="flex-grow-1 ms-3">
-              <h5 class="mb-1"><?php echo $name;?></h5>
-              <p class="mb-2 pb-1" style="color: #2b2a2a;"><?php echo $email;?></p>
-
-              <div class="pro_detail">
-                <div class="pro_num">
-                  <div>
-                    <p class="small text-muted mb-1" style="color: #2b2a2a;">Mobile No.</p>
-                    <p class="mb-0">+91 <?php echo $mobile;?></p>
-                  </div>
-                </div>
-
-               
-              </div>
-
-              <div class="d-flex pt-1 admin_btn">
-
-              <?php
-              $today_date = date('Y-m-d'); 
-              $sql = "SELECT * FROM `meal` WHERE `type`='0' AND`date`='$today_date';";
-              $result = mysqli_query($conn, $sql);
-              $num = mysqli_num_rows($result);
-              if($num == 0){
-                echo "<button type='button' onclick = 'window.location.href=`qrpage_l.php`;' class='btn btn-outline-dark me-1 flex-grow-1' disabled>Lunch QR</button>";
-              }
-              else{
-                echo "<button type='button' onclick = 'window.location.href=`qrpage_l.php`;' class='btn btn-outline-dark me-1 flex-grow-1'>Lunch QR</button>";
-              }
-
-              $sql = "SELECT * FROM `meal` WHERE `type`='1' AND`date`='$today_date';";
-              $result = mysqli_query($conn, $sql);
-              $num = mysqli_num_rows($result);
-              if($num == 0){
-                echo "<button type='button' onclick = 'window.location.href=`qrpage_d.php`;' class='btn btn-outline-dark me-1 flex-grow-1' disabled>Dinner QR</button>";
-              }
-              else{
-                echo "<button type='button' onclick = 'window.location.href=`qrpage_d.php`;' class='btn btn-outline-dark me-1 flex-grow-1' >Dinner QR</button>";
-              }
-              
-              ?>
-                <!-- <button type="button" onclick = "window.location.href='qrpage_l.php';" class="btn btn-outline-dark me-1 flex-grow-1" >Lunch QR</button>
-              
-                <button type="button" onclick = "window.location.href='qrpage_d.php';" class="btn btn-outline-dark me-1 flex-grow-1" >Dinner QR</button> -->
-                <button type="button" onclick = "window.location.href='createmeal_l.php';" class="btn btn-outline-dark me-1 flex-grow-1" >Create Lunch menu</button>
-                <button type="button" onclick = "window.location.href='createmeal_d.php';"class="btn btn-outline-dark me-1 flex-grow-1" >Create Dinner menu</button>
-                <button type="button" onclick = "window.location.href='live_meal.php';" class="btn btn-outline-dark me-1 flex-grow-1" >Live meal</button>
-                <button type="button" onclick = "window.location.href='adminpoll.php';" class="btn btn-outline-dark me-1 flex-grow-1" >Create Poll</button>
-              </div>
-              
-              <div class="d-flex justify-content-start rounded-3 p-2 mb-2">
-              </div>
-              
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    </div>
-
   
 
-  </section>
+  <section class="vh-200" style="background-color: #FFCC97;" >
+    <div class="container py-5 h-100">
+  <div class="container my-5">
 
-  <!-- End Hero -->
+    <table class="table" id="myTable" style="width: 700px;">
+      <thead>
+        <tr>
+          <th scope="col">S.No</th>
+          <th scope="col">Name</th>
+          <th scope="col">DateTime</th>
+          <th scope="col">FeedBack</th>
+          <th scope="col">Ratings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php 
+          $sql = "SELECT * FROM `feedback`";
+          $result = mysqli_query($conn, $sql);
+          $sno = 0;
+          while($row = mysqli_fetch_assoc($result)){
+            $sno = $sno + 1;
+            echo "<tr>
+            <th scope='row'>". $sno . "</th>
+            <td>". $row['name'] . "</td>
+            <td>". $row['datetime'] . "</td>
+            <td>". $row['feedback'] . "</td>
+            <td>". $row['rate'] . "</td>
+          </tr>";
+        } 
+          ?>
+
+
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
 
 
 
@@ -230,7 +177,7 @@ $sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/yummy-bootstrap-restaurant-website-template/ -->
-        Designed by <a href="">CodeAvengers</a>
+        Designed by <a href="https://bootstrapmade.com/">CodeAvengers</a>
       </div>
     </div>
 
@@ -253,6 +200,13 @@ $sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
   <script src="assets/js/main.js"></script>
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+
+    });
+  </script>
 
 </body>
 <script>
@@ -260,17 +214,6 @@ $sql1 = "SELECT * FROM `users` WHERE `mobile` = '$mobile'";
       window.history.replaceState(null, null, window.location.href);
     }
 </script>
-<script>
-  function to_scaner() {
-    window.location.href = "scaner.php";
-  }
-  function to_tokens() {
-    window.location.href = "subscription.php";
-  }
 
-  function to_payment() {
-   
-  }
-</script>
 
 </html>

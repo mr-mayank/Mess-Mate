@@ -37,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $itm4 = $_POST['itm4'];
     $itm5 = $_POST['itm5'];
 
-    $itm = $itm1."||||" . $itm2."||||" . $itm3."||||" . $itm4."||||" . $itm5;
+    $itm = $itm1."||" . $itm2."||" . $itm3."||" . $itm4."||" . $itm5;
 
 
     $sql = "INSERT INTO `meal`(`type`, `items`, `wastage_user` ,`date`, `price`) VALUES ('1','$itm', '$waste_users' ,'$date','50')";

@@ -44,7 +44,14 @@ if (isset($_POST['result'])) {
             }else{
                 $row1['users'] = $row1['users'] .','.$_SESSION['id'];
             }
-            $sql = "UPDATE `token` SET `tokens`=`tokens`-1 WHERE `id` = 1;";
+
+            if($str[1]==0){
+                $sql = "UPDATE `token` SET `tokens`=`tokens`-1 WHERE `userid` = '$_SESSION[id]'";
+            }
+            else{
+                $sql = "UPDATE `token` SET `d_tokens`=`d_tokens`-1 WHERE `userid` = '$_SESSION[id]'";
+            }
+            
             $sql2 = "UPDATE `meal` SET `users`= '$row1[users]' WHERE `id` = '$str[0]'";
             $sql_dec = "UPDATE `meal` SET `wastage_user`=`wastage_user`-1 WHERE `id` = '$str[0]'";
 
