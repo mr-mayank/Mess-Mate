@@ -23,7 +23,7 @@ if ($_SESSION['user_type'] != 'admin') {
 
   <!-- Favicons -->
   <!-- <link href="assets/img" rel="icon"> -->
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/icon.png" rel="icon">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +52,7 @@ if ($_SESSION['user_type'] != 'admin') {
       <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
-        <h1>Mess-Mate<span>.</span></h1>
+        <h1>Admin-Feedback<span>.</span></h1>
       </a>
 
       <nav id="navbar" class="navbar">

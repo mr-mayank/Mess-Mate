@@ -6,25 +6,49 @@ if ($_SESSION['user_type'] != 'admin') {
   header('location: login.php');
   exit();
 }
-if(!isset($_SESSION['item_id'])){
-    header('location: inventory.php');
-  exit();
-}
-else{
-  $item_id = $_SESSION['item_id'] ;
+
+
+if(isset($_POST['add_item']) || isset($_POST['remove_item'])){
+  $item_id = $_POST['item_id_for'] ;
  
     if(isset($_POST['add_item']) && isset($_POST['edit_q']) && 0< $_POST['edit_q']){
       $edit_q = $_POST['edit_q'];
       $sql = "UPDATE `inventory` SET `quntity`=`quntity`+$edit_q WHERE `item_id`='$item_id'";
       $result = mysqli_query($conn, $sql);
 
+      echo"
+      <script>
+        window.location.href = 'Inventory.php';
+      </script>";
+
     }
     if(isset($_POST['remove_item']) && isset($_POST['edit_q']) && 0< $_POST['edit_q']){
       $edit_q = $_POST['edit_q'];
+      $old_val = $_POST['old_val'];
+
+      if($old_val < $edit_q){
+        echo"
+        <script>
+          alert('You can not remove more than available');
+          window.location.href = 'Inventory.php';
+        </script>";
+        exit();
+      }else{
       $sql = "UPDATE `inventory` SET `quntity`=`quntity`-$edit_q WHERE `item_id`='$item_id'";
       $result = mysqli_query($conn, $sql);
-        
+      echo"
+      <script>
+        window.location.href = 'Inventory.php';
+      </script>";
+      }  
     }
+}elseif(isset($_POST['item_name'])){
+  $item_id = $_POST['item_id'];
+}else{
+  echo"
+  <script>
+    window.location.href = 'Inventory.php';
+  </script>";
 }
 
 
@@ -45,7 +69,7 @@ $id = $_SESSION['id'];
 
   <!-- Favicons -->
   <!-- <link href="assets/img" rel="icon"> -->
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/icon.png" rel="icon">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,7 +131,7 @@ $id = $_SESSION['id'];
 
 
     <?php 
-    $item_id = $_SESSION['item_id'] ;
+
 
     $sql = "SELECT * FROM inventory WHERE `item_id`='$item_id'";    
     $result = mysqli_query($conn, $sql);
@@ -126,7 +150,7 @@ $id = $_SESSION['id'];
             </div>
             <div class="flex-grow-1 ms-3">
               <h3 class="mb-1"><?php echo $name;?></h3>
-              <h3 class="mb-1">Total quntity:  <?php echo $quntity;?>KG</h3>
+              <h3 class="mb-1">Total quantity:  <?php echo $quntity;?>KG</h3>
 
               <div class="pro_detail">
                
@@ -136,9 +160,11 @@ $id = $_SESSION['id'];
 
               <form method="POST" class="btn_form">
                 <div class="edit_item">
-                <label>Quntity To edit: </label><input type="number" name="edit_q">
+                <label>Quantity To edit: </label><input type="number" name="edit_q">
+                <input type="hidden" name="old_val" value="<?php echo $quntity;?>">
                 </div>
                 <div class="btn_form">
+                  <input type="hidden" name="item_id_for" value="<?php echo $item_id;?>">
                 <button type="submit" name="add_item" class="btn btn-outline-dark me-1 flex-grow-1" >Add</button>
               
                 <button type="submit" name="remove_item" class="btn btn-outline-dark me-1 flex-grow-1" >Remove</button>

@@ -3,7 +3,7 @@
 <?php
 require 'database/include.php';
 
-if(isset($_SESSION['user_type']) != 'user' ){
+if($_SESSION['user_type'] != 'user' ){
 	header('location: login.php');
 	exit();
 }
@@ -38,6 +38,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             </script>";
     }
 
+}else{
+    echo "
+        <script>
+            alert('something went wrong');
+            window.location.href = 'profile.php';
+        </script>";
 }
 
 ?>

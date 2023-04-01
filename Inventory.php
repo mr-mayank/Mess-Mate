@@ -12,13 +12,6 @@ if ($_SESSION['user_type'] != 'admin') {
     exit();
 }
 
-if (isset($_POST['item_id'])) {
-
-    $_SESSION['item_id'] = $_POST['item_id'];
-    echo "<script>window.location.href = 'edit_item.php';
-    </script>";
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -28,13 +21,13 @@ if (isset($_POST['item_id'])) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Mess Mate</title>
+    <title>Inventory</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
     <!-- <link href="assets/img" rel="icon"> -->
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="assets/icon.png" rel="icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,9 +89,9 @@ if (isset($_POST['item_id'])) {
             $quntity = $row['quntity'];
 
         ?>
-            <form method="POST" name="item_form" id="item_form" class="item_form">
-                <div class="add_btn" onclick="submitform()">
-                    <div class="i_container" id="i_container">
+            <form method="POST" action="edit_item.php" name="item_form" id="item_form" class="item_form">
+                <div class="add_btn">
+                    <div class="i_container" >
                         <div class="item">
                             <div class="img">
                                 <img src="<?php echo $image; ?>" alt="" height="100px" width="100px">
@@ -108,12 +101,13 @@ if (isset($_POST['item_id'])) {
                                     <p><?php echo $name; ?></p>
                                 </div>
                                 <div class="quntity">
-                                    <p>Quntity: <?php echo $quntity; ?> KG</p>
+                                    <p>Quantity: <?php echo $quntity; ?> KG</p>
                                 </div>
-
+                                <input type="hidden" name="item_name" value="<?php echo $name; ?>">
                                 <input type="hidden" name="item_id" value="<?php echo $id; ?>">
 
                             </div>
+                            <button type="submit" class="btn btn-light" name="edit" id="edit">Edit</button>
                         </div>
                     </div>
                 </div>

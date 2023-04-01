@@ -149,9 +149,10 @@ $avg_wastage = round($total_wastage / 7, 2);
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Admin</title>
+  <title>Admin-Analysis</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  <link href="assets/icon.png" rel="icon">
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">

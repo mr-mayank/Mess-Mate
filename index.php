@@ -128,7 +128,7 @@ if(isset($_POST['reserv'])){
 
   <!-- Favicons -->
   <!-- <link href="assets/img" rel="icon"> -->
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/icon.png" rel="icon">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
