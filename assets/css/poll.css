@@ -22,7 +22,7 @@
   }
 
   body {
-    margin:300px;
+
     font-family: "Open Sans", sans-serif;
     background: var(--color-primary);
     color: #444444;
@@ -253,12 +253,16 @@
   
   /* Card */
   .card {
-    margin-bottom: 30px;
+    margin-top:7%;
+    width: 70%;
     border: none;
     border-radius: 5px;
     box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
   }
-  
+  .poll_div{
+    display: flex;
+    justify-content: center;
+  }
   .card-header,
   .card-footer {
     border-color: #ebeef4;

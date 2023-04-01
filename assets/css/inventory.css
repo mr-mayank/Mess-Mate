@@ -39,8 +39,16 @@
 .content{
     display: block;
     flex-wrap: wrap;
-    width: 100%;
+    width: 70%;
     margin-left: 10px;
+}
+#edit{
+    width: 10%;
+    height: 50px;
+    margin: 20px;
+    background-color: var(--color-primary);
+    border-radius: 10px;
+    overflow: hidden;
 }
 .content div{
     width: 50%;
